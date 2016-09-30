@@ -2,7 +2,11 @@
 
 //: Playground - noun: a place where people can play
 
-import Cocoa
+import Foundation
+
+#if os(Linux)
+import Dispatch
+#endif
 
 //: TODO Request current location from the location manager
 // https://developer.apple.com/reference/corelocation/cllocationmanager
@@ -49,7 +53,14 @@ let semaphore = DispatchSemaphore(value: 0)
 // Create a URL Request & handle the response data
 var request = URLRequest(url: url)
 request.httpMethod = "GET"
+
+#if os(Linux)
+let config = URLSessionConfiguration.default
+let session = URLSession(configuration: config)
+#else
 let session = URLSession.shared
+#endif
+
 let task = session.dataTask(with: request, completionHandler: { (returnData, response, error) in
 
     var strData = NSString(data: returnData!, encoding: String.Encoding.utf8.rawValue)
