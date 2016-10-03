@@ -62,13 +62,18 @@ let session = URLSession.shared
 #endif
 
 // Create the Data Task to request the Weather data from Dark Sky
-let task = session.dataTask(with: request, completionHandler: { (returnData, response, error) in
+let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
 
-    var strData = NSString(data: returnData!, encoding: String.Encoding.utf8.rawValue)
+    guard let data = data else {
+      print("Data not available.")
+      return
+    }
+
+    var strData = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
 
     do {
 
-        guard let jsonObject = try JSONSerialization.jsonObject(with: returnData!, options: []) as? [String: Any] else {
+        guard let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
           print("No weather data available!")
           return
         }
