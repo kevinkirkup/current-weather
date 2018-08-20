@@ -102,7 +102,8 @@ let task = session.dataTask(with: request, completionHandler: { (data, response,
           }
         }
 
-    } catch {
+    } catch let e as Error {
+      debugPrint("Exception: \(e)")
       print("Weather Data Not Available.")
     }
 
